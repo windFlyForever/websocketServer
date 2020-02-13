@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+
+<script>
+    var stompClient = null;
+
+
+    function connect() {
+        var sockjs = new SockJS("http://localhost:9010/websocket");
+        stompClient = Stomp.over(sockjs);
+        console.log(stompClient);
+        var fromUser = $("#fromUser").val();
+        stompClient.connect({}, function (frame) {//连接WebSocket服务端
+            console.log('Connected:' + frame);
+            stompClient.subscribe("/user/" + fromUser + "/message", function (response) {
+                var data = JSON.parse(response.body);
+
+                $("#mesg").append(data.fromUser.toString() + ":" + data.content.toString() + "<br/>")
+            });
+        });
+    }
+
+    function send() {
+        var fromUser = $("#fromUser").val();
+        var toUser = $("#toUser").val();
+        var content = $("#content").val();
+        stompClient.send("/message", {}, JSON.stringify({
+            fromUser: fromUser,
+            toUser: toUser,
+            content: content
+        }));
+        $("#mesg").append(fromUser+":"+content+"<br/>");
+
+    }
+
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+    }
+
+</script>
+
+<body>
+<button id="connect" onclick="connect()">连接</button>
+<button onclick="disconnect()">断开连接</button>
+<br/>
+当前用户：<input id="fromUser"><br/>
+接受人：<input id="toUser"><br/>
+消息：<input id="content">
+<button id="send" onclick="send()">发送</button>
+
+<div id="mesg"></div>
+</body>
+
+
+</html>

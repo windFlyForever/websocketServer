@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+
+<body>
+<div id="mesg"></div>
+</body>
+
+<script>
+    var sockjs=new SockJS("http://localhost:9010/websocket");
+    var stompClient=Stomp.over(sockjs);
+    console.log(stompClient);
+
+    stompClient.connect({},function(frame){//连接WebSocket服务端
+        console.log('Connected:' + frame);
+        stompClient.subscribe("/topic/getMesg",function(response){
+            //console.log(response)
+            $("#mesg").append(response.body+"<br/>")
+        });
+    });
+
+</script>
+</html>

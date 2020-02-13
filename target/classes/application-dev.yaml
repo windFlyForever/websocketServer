@@ -2,6 +2,12 @@ spring:
   application:
     name: websocket
 
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+
 server:
   port: 9010
 
