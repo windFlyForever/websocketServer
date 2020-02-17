@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/sockjs-client/1.4.0/sockjs.min.js"></script>
-    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="jquery.js"></script>
+    <script src="sockjs.js"></script>
+    <script src="stomp.js"></script>
 </head>
 
 <script>
@@ -37,6 +37,7 @@
             content: content
         }));
         $("#mesg").append(fromUser+":"+content+"<br/>");
+        $("#content").val("");
 
     }
 
